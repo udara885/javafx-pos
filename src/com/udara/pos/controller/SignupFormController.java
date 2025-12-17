@@ -27,9 +27,9 @@ public class SignupFormController {
             Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/robotikka", "root", "1234");
             String sql = "INSERT INTO user VALUES (?,?)";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1,txtEmail.getText());
+            preparedStatement.setString(1, txtEmail.getText());
             preparedStatement.setString(2, PasswordManager.encryptPassword(txtPassword.getText()));
-            if (preparedStatement.executeUpdate() > 0){
+            if (preparedStatement.executeUpdate() > 0) {
                 new Alert(Alert.AlertType.CONFIRMATION, "User Saved!").show();
                 clearFields();
             } else {
