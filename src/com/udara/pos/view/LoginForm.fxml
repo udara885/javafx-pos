@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXPasswordField?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="401.0" prefWidth="412.0" style="-fx-background-color: #ecf0f1;" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.udara.pos.controller.LoginFormController">
+    <children>
+        <Text fill="#830303" layoutX="176.0" layoutY="44.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Robotikka">
+            <font>
+                <Font name="System Bold" size="16.0" />
+            </font>
+        </Text>
+        <JFXTextField labelFloat="true" layoutX="39.0" layoutY="96.0" prefHeight="27.0" prefWidth="333.0" promptText="Email">
+            <font>
+                <Font name="System Bold" size="13.0" />
+            </font>
+        </JFXTextField>
+        <JFXPasswordField labelFloat="true" layoutX="40.0" layoutY="156.0" prefHeight="25.0" prefWidth="333.0" promptText="Password">
+            <font>
+                <Font name="System Bold" size="13.0" />
+            </font>
+        </JFXPasswordField>
+        <JFXButton buttonType="RAISED" layoutX="39.0" layoutY="220.0" prefHeight="37.0" prefWidth="333.0" style="-fx-background-color: #2980b9;" text="Sign in" textFill="WHITE">
+            <font>
+                <Font name="System Bold" size="15.0" />
+            </font>
+            <cursor>
+                <Cursor fx:constant="HAND" />
+            </cursor>
+        </JFXButton>
+        <JFXButton buttonType="RAISED" layoutX="40.0" layoutY="317.0" prefHeight="37.0" prefWidth="333.0" style="-fx-background-color: #34495e;" text="Create an account" textFill="WHITE">
+            <font>
+                <Font name="System Bold" size="15.0" />
+            </font>
+            <cursor>
+                <Cursor fx:constant="HAND" />
+            </cursor>
+        </JFXButton>
+        <Text layoutX="196.0" layoutY="292.0" strokeType="OUTSIDE" strokeWidth="0.0" text="OR">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </Text>
+    </children>
+</AnchorPane>
