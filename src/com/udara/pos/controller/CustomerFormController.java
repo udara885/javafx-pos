@@ -3,13 +3,15 @@ package com.udara.pos.controller;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import com.udara.pos.dao.DatabaseAccessCode;
+import com.udara.pos.dto.CustomerDto;
+import com.udara.pos.view.tm.CustomerTm;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
@@ -24,13 +26,37 @@ public class CustomerFormController {
     public JFXTextField txtSalary;
     public JFXButton btnSaveCustomer;
     public TextField txtSearch;
-    public TableView tbl;
+    public TableView<CustomerTm> tbl;
     public TableColumn colId;
     public TableColumn colEmail;
     public TableColumn colName;
     public TableColumn colContact;
     public TableColumn colSalary;
     public TableColumn colOperate;
+
+    private String searchText = "";
+
+    public void initialize() throws SQLException, ClassNotFoundException {
+        colId.setCellValueFactory(new PropertyValueFactory<>("id"));
+        colEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
+        colName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        colContact.setCellValueFactory(new PropertyValueFactory<>("contact"));
+        colSalary.setCellValueFactory(new PropertyValueFactory<>("salary"));
+        colOperate.setCellValueFactory(new PropertyValueFactory<>("btn"));
+        loadAllCustomers(searchText);
+    }
+
+    private void loadAllCustomers(String searchText) throws SQLException, ClassNotFoundException {
+        ObservableList<CustomerTm> observableList = FXCollections.observableArrayList();
+        int counter = 1;
+        for (CustomerDto dto : DatabaseAccessCode.searchCustomers(searchText)) {
+            Button btn = new Button("Delete");
+            CustomerTm tm = new CustomerTm(counter, dto.getEmail(), dto.getName(), dto.getContact(), dto.getSalary(), btn);
+            observableList.add(tm);
+            counter++;
+        }
+        tbl.setItems(observableList);
+    }
 
     public void btnBackToHomeOnAction(ActionEvent actionEvent) throws IOException {
         setUi("DashboardForm");
@@ -48,6 +74,7 @@ public class CustomerFormController {
             if (DatabaseAccessCode.createCustomer(txtEmail.getText(), txtName.getText(), txtContact.getText(), Double.parseDouble(txtSalary.getText()))) {
                 new Alert(Alert.AlertType.CONFIRMATION, "Customer Saved!").show();
                 clearFields();
+                loadAllCustomers(searchText);
             } else {
                 new Alert(Alert.AlertType.WARNING, "Try Again!").show();
             }
@@ -57,7 +84,7 @@ public class CustomerFormController {
         }
     }
 
-    private void clearFields(){
+    private void clearFields() {
         txtEmail.clear();
         txtName.clear();
         txtContact.clear();
