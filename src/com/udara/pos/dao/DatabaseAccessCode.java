@@ -1,5 +1,6 @@
 package com.udara.pos.dao;
 
+import com.udara.pos.db.DbConnection;
 import com.udara.pos.dto.CustomerDto;
 import com.udara.pos.dto.UserDto;
 import com.udara.pos.util.PasswordManager;
@@ -13,27 +14,20 @@ public class DatabaseAccessCode {
     // user management
 
     public static boolean createUser(String email, String password) throws ClassNotFoundException, SQLException {
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/robotikka", "root", "1234");
         String sql = "INSERT INTO user VALUES (?,?)";
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        PreparedStatement preparedStatement = DbConnection.getInstance().getConnection().prepareStatement(sql);
         preparedStatement.setString(1, email);
         preparedStatement.setString(2, PasswordManager.encryptPassword(password));
         return preparedStatement.executeUpdate() > 0;
     }
 
     public static UserDto findUser(String email) throws ClassNotFoundException, SQLException {
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/robotikka", "root", "1234");
         String sql = "SELECT * FROM user WHERE email=?";
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        PreparedStatement preparedStatement = DbConnection.getInstance().getConnection().prepareStatement(sql);
         preparedStatement.setString(1, email);
         ResultSet resultSet = preparedStatement.executeQuery();
-        if (resultSet.next()){
-            return new UserDto(
-                    resultSet.getString(1),
-                    resultSet.getString(2)
-            );
+        if (resultSet.next()) {
+            return new UserDto(resultSet.getString(1), resultSet.getString(2));
         }
         return null;
     }
@@ -41,10 +35,8 @@ public class DatabaseAccessCode {
     // customer management
 
     public static boolean createCustomer(String email, String name, String contact, double salary) throws SQLException, ClassNotFoundException {
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/robotikka", "root", "1234");
         String sql = "INSERT INTO customer VALUES (?,?,?,?)";
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        PreparedStatement preparedStatement = DbConnection.getInstance().getConnection().prepareStatement(sql);
         preparedStatement.setString(1, email);
         preparedStatement.setString(2, name);
         preparedStatement.setString(3, contact);
@@ -53,10 +45,8 @@ public class DatabaseAccessCode {
     }
 
     public static boolean updateCustomer(String email, String name, String contact, double salary) throws ClassNotFoundException, SQLException {
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/robotikka", "root", "1234");
         String sql = "UPDATE customer SET name=?, contact=?, salary=? WHERE email=?";
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        PreparedStatement preparedStatement = DbConnection.getInstance().getConnection().prepareStatement(sql);
         preparedStatement.setString(1, name);
         preparedStatement.setString(2, contact);
         preparedStatement.setDouble(3, salary);
@@ -65,67 +55,44 @@ public class DatabaseAccessCode {
     }
 
     public static CustomerDto findCustomer(String email) throws SQLException, ClassNotFoundException {
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/robotikka", "root", "1234");
         String sql = "SELECT * FROM customer WHERE email=?";
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
-        preparedStatement.setString(1,email);
+        PreparedStatement preparedStatement = DbConnection.getInstance().getConnection().prepareStatement(sql);
+        preparedStatement.setString(1, email);
         ResultSet resultSet = preparedStatement.executeQuery();
-        if (resultSet.next()){
-            return new CustomerDto(
-                    resultSet.getString(1),
-                    resultSet.getString(2),
-                    resultSet.getString(3),
-                    resultSet.getDouble(4)
-            );
+        if (resultSet.next()) {
+            return new CustomerDto(resultSet.getString(1), resultSet.getString(2), resultSet.getString(3), resultSet.getDouble(4));
         }
         return null;
     }
 
     public static boolean deleteCustomer(String email) throws ClassNotFoundException, SQLException {
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/robotikka", "root", "1234");
         String sql = "DELETE FROM customer WHERE email=?";
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        PreparedStatement preparedStatement = DbConnection.getInstance().getConnection().prepareStatement(sql);
         preparedStatement.setString(1, email);
         return preparedStatement.executeUpdate() > 0;
     }
 
-    public static List<CustomerDto> findAllCustomer() throws ClassNotFoundException, SQLException {
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/robotikka", "root", "1234");
+    public static List<CustomerDto> findAllCustomers() throws ClassNotFoundException, SQLException {
         String sql = "SELECT * FROM customer";
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        PreparedStatement preparedStatement = DbConnection.getInstance().getConnection().prepareStatement(sql);
         ResultSet resultSet = preparedStatement.executeQuery();
         List<CustomerDto> dtos = new ArrayList<>();
-        while (resultSet.next()){
-            dtos.add(new CustomerDto(
-                    resultSet.getString(1),
-                    resultSet.getString(2),
-                    resultSet.getString(3),
-                    resultSet.getDouble(4)
-            ));
+        while (resultSet.next()) {
+            dtos.add(new CustomerDto(resultSet.getString(1), resultSet.getString(2), resultSet.getString(3), resultSet.getDouble(4)));
         }
         return dtos;
     }
 
     public static List<CustomerDto> searchCustomers(String searchText) throws ClassNotFoundException, SQLException {
-        searchText = "%"+searchText+"%";
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/robotikka", "root", "1234");
+        searchText = "%" + searchText + "%";
         String sql = "SELECT * FROM customer WHERE email LIKE ? || name LIKE ?";
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
-        preparedStatement.setString(1,searchText);
-        preparedStatement.setString(2,searchText);
+        PreparedStatement preparedStatement = DbConnection.getInstance().getConnection().prepareStatement(sql);
+        preparedStatement.setString(1, searchText);
+        preparedStatement.setString(2, searchText);
         ResultSet resultSet = preparedStatement.executeQuery();
         List<CustomerDto> dtos = new ArrayList<>();
-        while (resultSet.next()){
-            dtos.add(new CustomerDto(
-                    resultSet.getString(1),
-                    resultSet.getString(2),
-                    resultSet.getString(3),
-                    resultSet.getDouble(4)
-            ));
+        while (resultSet.next()) {
+            dtos.add(new CustomerDto(resultSet.getString(1), resultSet.getString(2), resultSet.getString(3), resultSet.getDouble(4)));
         }
         return dtos;
     }
