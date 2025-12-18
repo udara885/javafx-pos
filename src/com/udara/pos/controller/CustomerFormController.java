@@ -17,6 +17,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Optional;
 
 public class CustomerFormController {
     public AnchorPane context;
@@ -44,11 +45,19 @@ public class CustomerFormController {
         colSalary.setCellValueFactory(new PropertyValueFactory<>("salary"));
         colOperate.setCellValueFactory(new PropertyValueFactory<>("btn"));
         loadAllCustomers(searchText);
-        tbl.getSelectionModel().selectedItemProperty().addListener((observable,oldValue,newValue) -> {
-            if (newValue!=null){
+        tbl.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
                 setData(newValue);
             }
         });
+        txtSearch.textProperty().addListener(((observable, oldValue, newValue) -> {
+            searchText = newValue;
+            try {
+                loadAllCustomers(searchText);
+            } catch (ClassNotFoundException | SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }));
     }
 
     private void setData(CustomerTm newValue) {
@@ -64,9 +73,26 @@ public class CustomerFormController {
     private void loadAllCustomers(String searchText) throws SQLException, ClassNotFoundException {
         ObservableList<CustomerTm> observableList = FXCollections.observableArrayList();
         int counter = 1;
-        for (CustomerDto dto : DatabaseAccessCode.searchCustomers(searchText)) {
+        for (CustomerDto dto : searchText.length() > 0 ? DatabaseAccessCode.searchCustomers(searchText) : DatabaseAccessCode.findAllCustomer()) {
             Button btn = new Button("Delete");
             CustomerTm tm = new CustomerTm(counter, dto.getEmail(), dto.getName(), dto.getContact(), dto.getSalary(), btn);
+            btn.setOnAction(e -> {
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure?", ButtonType.YES, ButtonType.NO);
+                Optional<ButtonType> buttonType = alert.showAndWait();
+                if (buttonType.get().equals(ButtonType.YES)) {
+                    try {
+                        if (DatabaseAccessCode.deleteCustomer(dto.getEmail())) {
+                            new Alert(Alert.AlertType.INFORMATION, "Customer Deleted!").show();
+                            loadAllCustomers(searchText);
+                        } else {
+                            new Alert(Alert.AlertType.WARNING, "Try Again!").show();
+                        }
+                    } catch (ClassNotFoundException | SQLException ex) {
+                        ex.printStackTrace();
+                        new Alert(Alert.AlertType.ERROR, ex.getMessage()).show();
+                    }
+                }
+            });
             observableList.add(tm);
             counter++;
         }
@@ -88,7 +114,7 @@ public class CustomerFormController {
 
     public void btnSaveCustomerOnAction(ActionEvent actionEvent) {
         try {
-            if (btnSaveCustomer.getText().equals("Save Customer")){
+            if (btnSaveCustomer.getText().equals("Save Customer")) {
                 if (DatabaseAccessCode.createCustomer(txtEmail.getText(), txtName.getText(), txtContact.getText(), Double.parseDouble(txtSalary.getText()))) {
                     new Alert(Alert.AlertType.CONFIRMATION, "Customer Saved!").show();
                     clearFields();
@@ -108,7 +134,6 @@ public class CustomerFormController {
                     new Alert(Alert.AlertType.WARNING, "Try Again!").show();
                 }
             }
-
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
