@@ -28,14 +28,14 @@ public class LoginFormController {
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 if (PasswordManager.checkPassword(txtPassword.getText(), resultSet.getString("password"))) {
-                    System.out.println("Completed");
+                    setUi("DashboardFrom");
                 } else {
                     new Alert(Alert.AlertType.WARNING, "Check your password and try again!").show();
                 }
             } else {
                 new Alert(Alert.AlertType.WARNING, "User email not found!").show();
             }
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch (ClassNotFoundException | SQLException | IOException e) {
             e.printStackTrace();
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
