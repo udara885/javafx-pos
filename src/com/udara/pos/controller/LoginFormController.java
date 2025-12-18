@@ -2,6 +2,8 @@ package com.udara.pos.controller;
 
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
+import com.udara.pos.dao.DatabaseAccessCode;
+import com.udara.pos.dto.UserDto;
 import com.udara.pos.util.PasswordManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -20,15 +22,10 @@ public class LoginFormController {
 
     public void btnSignInOnAction(ActionEvent actionEvent) {
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/robotikka", "root", "1234");
-            String sql = "SELECT * FROM user WHERE email=?";
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, txtEmail.getText());
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                if (PasswordManager.checkPassword(txtPassword.getText(), resultSet.getString("password"))) {
-                    setUi("DashboardFrom");
+            UserDto userDto = DatabaseAccessCode.findUser(txtEmail.getText());
+            if (userDto!=null) {
+                if (PasswordManager.checkPassword(txtPassword.getText(), userDto.getPassword())) {
+                    setUi("DashboardForm");
                 } else {
                     new Alert(Alert.AlertType.WARNING, "Check your password and try again!").show();
                 }
