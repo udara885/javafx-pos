@@ -3,9 +3,6 @@ package com.udara.pos.dao;
 import com.udara.pos.dao.custom.CustomerDao;
 import com.udara.pos.dao.custom.ProductDao;
 import com.udara.pos.dao.custom.UserDao;
-import com.udara.pos.dao.custom.impl.CustomerDaoImpl;
-import com.udara.pos.dao.custom.impl.ProductDaoImpl;
-import com.udara.pos.dao.custom.impl.UserDaoImpl;
 import com.udara.pos.dto.CustomerDto;
 import com.udara.pos.dto.ProductDto;
 import com.udara.pos.dto.UserDto;
@@ -19,9 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DatabaseAccessCode {
-    UserDao userDao = (UserDao) DaoFactory.getInstance().getDao(DaoType.USER);
-    CustomerDao customerDao = (CustomerDao) DaoFactory.getInstance().getDao(DaoType.CUSTOMER);
-    ProductDao productDao = (ProductDao) DaoFactory.getInstance().getDao(DaoType.PRODUCT);
+    UserDao userDao = DaoFactory.getInstance().getDao(DaoType.USER);
+    CustomerDao customerDao = DaoFactory.getInstance().getDao(DaoType.CUSTOMER);
+    ProductDao productDao = DaoFactory.getInstance().getDao(DaoType.PRODUCT);
 
     // user management
 
