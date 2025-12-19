@@ -116,7 +116,7 @@ public class CustomerFormController {
         try {
             if (btnSaveCustomer.getText().equals("Save Customer")) {
                 if (DatabaseAccessCode.createCustomer(txtEmail.getText(), txtName.getText(), txtContact.getText(), Double.parseDouble(txtSalary.getText()))) {
-                    new Alert(Alert.AlertType.CONFIRMATION, "Customer Saved!").show();
+                    new Alert(Alert.AlertType.INFORMATION, "Customer Saved!").show();
                     clearFields();
                     loadAllCustomers(searchText);
                 } else {
@@ -124,7 +124,7 @@ public class CustomerFormController {
                 }
             } else {
                 if (DatabaseAccessCode.updateCustomer(txtEmail.getText(), txtName.getText(), txtContact.getText(), Double.parseDouble(txtSalary.getText()))) {
-                    new Alert(Alert.AlertType.CONFIRMATION, "Customer Updated!").show();
+                    new Alert(Alert.AlertType.INFORMATION, "Customer Updated!").show();
                     clearFields();
                     loadAllCustomers(searchText);
                     //-----------

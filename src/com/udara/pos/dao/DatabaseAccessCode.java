@@ -2,6 +2,7 @@ package com.udara.pos.dao;
 
 import com.udara.pos.db.DbConnection;
 import com.udara.pos.dto.CustomerDto;
+import com.udara.pos.dto.ProductDto;
 import com.udara.pos.dto.UserDto;
 import com.udara.pos.util.PasswordManager;
 
@@ -95,5 +96,65 @@ public class DatabaseAccessCode {
             dtos.add(new CustomerDto(resultSet.getString(1), resultSet.getString(2), resultSet.getString(3), resultSet.getDouble(4)));
         }
         return dtos;
+    }
+
+    // product management
+
+    public static boolean createProduct(int id, String description) throws SQLException, ClassNotFoundException {
+        String sql = "INSERT INTO product VALUES (?,?)";
+        PreparedStatement preparedStatement = DbConnection.getInstance().getConnection().prepareStatement(sql);
+        preparedStatement.setInt(1, id);
+        preparedStatement.setString(2, description);
+        return preparedStatement.executeUpdate() > 0;
+    }
+
+    public static int getLastId() throws SQLException, ClassNotFoundException {
+        String sql = "SELECT code FROM product ORDER BY code DESC LIMIT 1";
+        PreparedStatement preparedStatement = DbConnection.getInstance().getConnection().prepareStatement(sql);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        if (resultSet.next()) {
+            return resultSet.getInt(1);
+        }
+        return 0;
+    }
+
+    public static boolean updateProduct(int id, String description) throws SQLException, ClassNotFoundException {
+        String sql = "UPDATE product SET description=? WHERE code=?";
+        PreparedStatement preparedStatement = DbConnection.getInstance().getConnection().prepareStatement(sql);
+        preparedStatement.setString(1, description);
+        preparedStatement.setInt(2, id);
+        return preparedStatement.executeUpdate() > 0;
+    }
+
+    public static boolean deleteProduct(int id) throws SQLException, ClassNotFoundException {
+        String sql = "DELETE FROM product WHERE code=?";
+        PreparedStatement preparedStatement = DbConnection.getInstance().getConnection().prepareStatement(sql);
+        preparedStatement.setInt(1, id);
+        return preparedStatement.executeUpdate() > 0;
+    }
+
+    public static List<ProductDto> findAllProducts() throws SQLException, ClassNotFoundException {
+        String sql = "SELECT * FROM product";
+        PreparedStatement preparedStatement = DbConnection.getInstance().getConnection().prepareStatement(sql);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        List<ProductDto> productDtos = new ArrayList<>();
+        while (resultSet.next()) {
+            productDtos.add(new ProductDto(resultSet.getInt(1), resultSet.getString(2)));
+        }
+        return productDtos;
+    }
+
+    public static List<ProductDto> searchProducts(String searchText) throws SQLException, ClassNotFoundException {
+        searchText = "%" + searchText + "%";
+        String sql = "SELECT * FROM product WHERE code LIKE ? || description LIKE ?";
+        PreparedStatement preparedStatement = DbConnection.getInstance().getConnection().prepareStatement(sql);
+        preparedStatement.setString(1, searchText);
+        preparedStatement.setString(2, searchText);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        List<ProductDto> productDtos = new ArrayList<>();
+        while (resultSet.next()) {
+            productDtos.add(new ProductDto(resultSet.getInt(1), resultSet.getString(2)));
+        }
+        return productDtos;
     }
 }
