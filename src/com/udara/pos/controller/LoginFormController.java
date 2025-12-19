@@ -2,6 +2,7 @@ package com.udara.pos.controller;
 
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
+import com.udara.pos.dao.DatabaseAccessCode;
 import com.udara.pos.dto.UserDto;
 import com.udara.pos.util.PasswordManager;
 import javafx.event.ActionEvent;
@@ -21,7 +22,7 @@ public class LoginFormController {
 
     public void btnSignInOnAction(ActionEvent actionEvent) {
         try {
-            UserDto userDto = DatabaseAccessCode.findUser(txtEmail.getText());
+            UserDto userDto = new DatabaseAccessCode().findUser(txtEmail.getText());
             if (userDto!=null) {
                 if (PasswordManager.checkPassword(txtPassword.getText(), userDto.getPassword())) {
                     setUi("DashboardForm");

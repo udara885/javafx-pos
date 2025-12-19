@@ -2,6 +2,7 @@ package com.udara.pos.controller;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
+import com.udara.pos.dao.DatabaseAccessCode;
 import com.udara.pos.dto.CustomerDto;
 import com.udara.pos.view.tm.CustomerTm;
 import javafx.collections.FXCollections;
@@ -72,7 +73,8 @@ public class CustomerFormController {
     private void loadAllCustomers(String searchText) throws SQLException, ClassNotFoundException {
         ObservableList<CustomerTm> observableList = FXCollections.observableArrayList();
         int counter = 1;
-        for (CustomerDto dto : searchText.length() > 0 ? DatabaseAccessCode.searchCustomers(searchText) : DatabaseAccessCode.findAllCustomers()) {
+        for (CustomerDto dto : searchText.length() > 0 ? new DatabaseAccessCode().searchCustomers(searchText) :
+                new DatabaseAccessCode().findAllCustomers()) {
             Button btn = new Button("Delete");
             CustomerTm tm = new CustomerTm(counter, dto.getEmail(), dto.getName(), dto.getContact(), dto.getSalary(), btn);
             btn.setOnAction(e -> {
@@ -80,7 +82,7 @@ public class CustomerFormController {
                 Optional<ButtonType> buttonType = alert.showAndWait();
                 if (buttonType.get().equals(ButtonType.YES)) {
                     try {
-                        if (DatabaseAccessCode.deleteCustomer(dto.getEmail())) {
+                        if (new DatabaseAccessCode().deleteCustomer(dto.getEmail())) {
                             new Alert(Alert.AlertType.INFORMATION, "Customer Deleted!").show();
                             loadAllCustomers(searchText);
                         } else {
@@ -114,7 +116,7 @@ public class CustomerFormController {
     public void btnSaveCustomerOnAction(ActionEvent actionEvent) {
         try {
             if (btnSaveCustomer.getText().equals("Save Customer")) {
-                if (DatabaseAccessCode.createCustomer(txtEmail.getText(), txtName.getText(), txtContact.getText(), Double.parseDouble(txtSalary.getText()))) {
+                if (new DatabaseAccessCode().createCustomer(txtEmail.getText(), txtName.getText(), txtContact.getText(), Double.parseDouble(txtSalary.getText()))) {
                     new Alert(Alert.AlertType.INFORMATION, "Customer Saved!").show();
                     clearFields();
                     loadAllCustomers(searchText);
@@ -122,7 +124,7 @@ public class CustomerFormController {
                     new Alert(Alert.AlertType.WARNING, "Try Again!").show();
                 }
             } else {
-                if (DatabaseAccessCode.updateCustomer(txtEmail.getText(), txtName.getText(), txtContact.getText(), Double.parseDouble(txtSalary.getText()))) {
+                if (new DatabaseAccessCode().updateCustomer(txtEmail.getText(), txtName.getText(), txtContact.getText(), Double.parseDouble(txtSalary.getText()))) {
                     new Alert(Alert.AlertType.INFORMATION, "Customer Updated!").show();
                     clearFields();
                     loadAllCustomers(searchText);
