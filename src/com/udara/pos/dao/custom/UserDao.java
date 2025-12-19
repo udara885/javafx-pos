@@ -1,18 +1,8 @@
 package com.udara.pos.dao.custom;
 
+import com.udara.pos.dao.CrudDao;
 import com.udara.pos.entitiy.User;
 
-import java.sql.SQLException;
-import java.util.List;
+public interface UserDao extends CrudDao<User, String> {
 
-public interface UserDao {
-    public boolean saveUser(User user) throws SQLException, ClassNotFoundException;
-
-    public boolean updateUser(User user) throws SQLException, ClassNotFoundException;
-
-    public boolean deleteUser(String email) throws SQLException, ClassNotFoundException;
-
-    public User findUser(String email) throws SQLException, ClassNotFoundException;
-
-    public List<User> findAllUsers() throws SQLException, ClassNotFoundException;
 }
