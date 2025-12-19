@@ -15,4 +15,8 @@ public interface CustomerDao {
     public Customer findCustomer(String email) throws SQLException, ClassNotFoundException;
 
     public List<Customer> findAllCustomers() throws SQLException, ClassNotFoundException;
+
+    //-------------------
+
+    public List<Customer> searchCustomers(String searchText) throws SQLException, ClassNotFoundException;
 }

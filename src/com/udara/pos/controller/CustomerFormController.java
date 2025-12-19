@@ -2,7 +2,6 @@ package com.udara.pos.controller;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
-import com.udara.pos.dao.DatabaseAccessCode;
 import com.udara.pos.dto.CustomerDto;
 import com.udara.pos.view.tm.CustomerTm;
 import javafx.collections.FXCollections;

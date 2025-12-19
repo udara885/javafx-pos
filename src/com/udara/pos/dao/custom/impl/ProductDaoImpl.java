@@ -60,4 +60,30 @@ public class ProductDaoImpl implements ProductDao {
         }
         return productList;
     }
+
+    @Override
+    public int getLastId() throws SQLException, ClassNotFoundException {
+        String sql = "SELECT code FROM product ORDER BY code DESC LIMIT 1";
+        PreparedStatement preparedStatement = DbConnection.getInstance().getConnection().prepareStatement(sql);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        if (resultSet.next()) {
+            return resultSet.getInt(1);
+        }
+        return 0;
+    }
+
+    @Override
+    public List<Product> searchProducts(String searchText) throws SQLException, ClassNotFoundException {
+        searchText = "%" + searchText + "%";
+        String sql = "SELECT * FROM product WHERE code LIKE ? || description LIKE ?";
+        PreparedStatement preparedStatement = DbConnection.getInstance().getConnection().prepareStatement(sql);
+        preparedStatement.setString(1, searchText);
+        preparedStatement.setString(2, searchText);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        List<Product> productList = new ArrayList<>();
+        while (resultSet.next()) {
+            productList.add(new Product(resultSet.getInt(1), resultSet.getString(2)));
+        }
+        return productList;
+    }
 }
