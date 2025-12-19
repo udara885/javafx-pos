@@ -12,15 +12,16 @@ import com.udara.pos.dto.UserDto;
 import com.udara.pos.entitiy.Customer;
 import com.udara.pos.entitiy.Product;
 import com.udara.pos.entitiy.User;
+import com.udara.pos.enums.DaoType;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class DatabaseAccessCode {
-    UserDao userDao = new UserDaoImpl();
-    CustomerDao customerDao = new CustomerDaoImpl();
-    ProductDao productDao = new ProductDaoImpl();
+    UserDao userDao = (UserDao) DaoFactory.getInstance().getDao(DaoType.USER);
+    CustomerDao customerDao = (CustomerDao) DaoFactory.getInstance().getDao(DaoType.CUSTOMER);
+    ProductDao productDao = (ProductDao) DaoFactory.getInstance().getDao(DaoType.PRODUCT);
 
     // user management
 
