@@ -4,7 +4,6 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import com.udara.pos.dao.DatabaseAccessCode;
 import com.udara.pos.dto.ProductDto;
-import com.udara.pos.view.tm.CustomerTm;
 import com.udara.pos.view.tm.ProductTm;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
