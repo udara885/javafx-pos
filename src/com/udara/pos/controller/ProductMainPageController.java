@@ -104,12 +104,7 @@ public class ProductMainPageController {
 
     private void setProductCode() {
         try {
-            int lastId = DatabaseAccessCode.getLastId();
-            if (lastId != 0) {
-                txtProductCode.setText(String.valueOf(lastId + 1));
-            } else {
-                txtProductCode.setText("1");
-            }
+            txtProductCode.setText(String.valueOf(DatabaseAccessCode.getLastId() + 1));
         } catch (ClassNotFoundException | SQLException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
