@@ -2,16 +2,17 @@ package com.udara.pos.bo.custom;
 
 import com.udara.pos.dto.UserDto;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public interface UserBo {
-    public boolean saveUser(UserDto dto);
+    public boolean saveUser(UserDto dto) throws SQLException, ClassNotFoundException;
 
-    public boolean UpdateUser(UserDto dto);
+    public boolean UpdateUser(UserDto dto) throws SQLException, ClassNotFoundException;
 
-    public boolean deleteUser(String email);
+    public boolean deleteUser(String email) throws SQLException, ClassNotFoundException;
 
-    public UserDto findUser(String email);
+    public UserDto findUser(String email) throws SQLException, ClassNotFoundException;
 
-    public List<UserDto> findAllUsers();
+    public List<UserDto> findAllUsers() throws SQLException, ClassNotFoundException;
 }

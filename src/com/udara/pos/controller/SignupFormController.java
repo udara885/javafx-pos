@@ -2,7 +2,8 @@ package com.udara.pos.controller;
 
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
-import com.udara.pos.dao.DatabaseAccessCode;
+import com.udara.pos.bo.custom.impl.UserBoImpl;
+import com.udara.pos.dto.UserDto;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -20,7 +21,7 @@ public class SignupFormController {
 
     public void btnRegisterNowOnAction(ActionEvent actionEvent) {
         try {
-            if (new DatabaseAccessCode().createUser(txtEmail.getText(), txtPassword.getText())) {
+            if (new UserBoImpl().saveUser(new UserDto(txtEmail.getText(), txtPassword.getText()))) {
                 new Alert(Alert.AlertType.CONFIRMATION, "User Saved!").show();
                 clearFields();
             } else {

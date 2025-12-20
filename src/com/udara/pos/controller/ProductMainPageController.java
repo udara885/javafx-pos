@@ -2,7 +2,7 @@ package com.udara.pos.controller;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
-import com.udara.pos.dao.DatabaseAccessCode;
+import com.udara.pos.bo.custom.impl.ProductBoImpl;
 import com.udara.pos.dto.ProductDto;
 import com.udara.pos.view.tm.ProductTm;
 import javafx.collections.FXCollections;
@@ -74,7 +74,7 @@ public class ProductMainPageController {
 
     private void loadAllProducts(String searchText) throws SQLException, ClassNotFoundException {
         ObservableList<ProductTm> observableList = FXCollections.observableArrayList();
-        for (ProductDto dto : searchText.length() > 0 ? new DatabaseAccessCode().searchProducts(searchText) : new DatabaseAccessCode().findAllProducts()) {
+        for (ProductDto dto : searchText.length() > 0 ? new ProductBoImpl().searchProducts(searchText) : new ProductBoImpl().findAllProducts()) {
             Button showMore = new Button("Show More");
             Button deleteButton = new Button("Delete");
             ProductTm tm = new ProductTm(dto.getId(), dto.getDescription(), showMore, deleteButton);
@@ -83,7 +83,7 @@ public class ProductMainPageController {
                 Optional<ButtonType> buttonType = alert.showAndWait();
                 if (buttonType.get().equals(ButtonType.YES)) {
                     try {
-                        if (new DatabaseAccessCode().deleteProduct(dto.getId())) {
+                        if (new ProductBoImpl().deleteProduct(dto.getId())) {
                             new Alert(Alert.AlertType.INFORMATION, "Product Deleted!").show();
                             loadAllProducts(searchText);
                             setProductCode();
@@ -103,7 +103,7 @@ public class ProductMainPageController {
 
     private void setProductCode() {
         try {
-            txtProductCode.setText(String.valueOf(new DatabaseAccessCode().getLastId() + 1));
+            txtProductCode.setText(String.valueOf(new ProductBoImpl().getLastId() + 1));
         } catch (ClassNotFoundException | SQLException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
@@ -122,7 +122,7 @@ public class ProductMainPageController {
     public void btnSaveProductOnAction(ActionEvent actionEvent) {
         try {
             if (btnSaveProduct.getText().equals("Save Product")) {
-                if (new DatabaseAccessCode().createProduct(Integer.parseInt(txtProductCode.getText()), txtProductDescription.getText())) {
+                if (new ProductBoImpl().saveProduct(new ProductDto(Integer.parseInt(txtProductCode.getText()), txtProductDescription.getText()))) {
                     new Alert(Alert.AlertType.INFORMATION, "Product Saved!").show();
                     clearFields();
                     setProductCode();
@@ -131,7 +131,7 @@ public class ProductMainPageController {
                     new Alert(Alert.AlertType.WARNING, "Try Again!").show();
                 }
             } else {
-                if (new DatabaseAccessCode().updateProduct(Integer.parseInt(txtProductCode.getText()), txtProductDescription.getText())) {
+                if (new ProductBoImpl().updateProduct(new ProductDto(Integer.parseInt(txtProductCode.getText()), txtProductDescription.getText()))) {
                     new Alert(Alert.AlertType.INFORMATION, "Product Updated!").show();
                     clearFields();
                     setProductCode();
