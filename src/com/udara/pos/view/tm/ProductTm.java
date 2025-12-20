@@ -3,7 +3,7 @@ package com.udara.pos.view.tm;
 import javafx.scene.control.Button;
 
 public class ProductTm {
-    private int id;
+    private int code;
     private String description;
     private Button showMore;
     private Button deleteButton;
@@ -11,19 +11,19 @@ public class ProductTm {
     public ProductTm() {
     }
 
-    public ProductTm(int id, String description, Button showMore, Button deleteButton) {
-        this.id = id;
+    public ProductTm(int code, String description, Button showMore, Button deleteButton) {
+        this.code = code;
         this.description = description;
         this.showMore = showMore;
         this.deleteButton = deleteButton;
     }
 
-    public int getId() {
-        return id;
+    public int getCode() {
+        return code;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setCode(int code) {
+        this.code = code;
     }
 
     public String getDescription() {

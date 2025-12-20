@@ -11,6 +11,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -48,12 +49,11 @@ public class ProductMainFormController {
     ProductBo bo = BoFactory.getInstance().getBo(BoType.PRODUCT);
 
     public void initialize() throws SQLException, ClassNotFoundException {
-        colProductId.setCellValueFactory(new PropertyValueFactory<>("id"));
+        colProductId.setCellValueFactory(new PropertyValueFactory<>("code"));
         colDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
         colShowMore.setCellValueFactory(new PropertyValueFactory<>("showMore"));
         colProductDelete.setCellValueFactory(new PropertyValueFactory<>("deleteButton"));
         loadAllProducts(searchText);
-        txtProductCode.setEditable(false);
         setProductCode();
         tblProduct.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) -> {
             if (newValue != null) {
@@ -72,8 +72,10 @@ public class ProductMainFormController {
 
     private void setData(ProductTm productTm) {
         btnSaveProduct.setText("Update Product");
-        txtProductCode.setText(String.valueOf(productTm.getId()));
+        txtProductCode.setText(String.valueOf(productTm.getCode()));
         txtProductDescription.setText(productTm.getDescription());
+        txtSelectedProductCode.setText(String.valueOf(productTm.getCode()));
+        txtSelectedProductDescription.setText(productTm.getDescription());
     }
 
     private void loadAllProducts(String searchText) throws SQLException, ClassNotFoundException {
@@ -151,7 +153,12 @@ public class ProductMainFormController {
         }
     }
 
-    public void btnNewBatchOnAction(ActionEvent actionEvent) {
+    public void btnNewBatchOnAction(ActionEvent actionEvent) throws IOException {
+        Stage stage = new Stage();
+        Parent load = FXMLLoader.load(getClass().getResource("../view/NewBatchForm.fxml"));
+        stage.setScene(new Scene(load));
+        stage.show();
+        stage.centerOnScreen();
     }
 
     private void setUi(String url) throws IOException {
