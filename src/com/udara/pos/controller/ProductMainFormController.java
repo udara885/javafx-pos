@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Optional;
 
-public class ProductMainPageController {
+public class ProductMainFormController {
     public AnchorPane context;
     public JFXTextField txtProductCode;
     public TextArea txtProductDescription;
