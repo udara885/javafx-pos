@@ -1,6 +1,6 @@
 package com.udara.pos.entitiy;
 
-public class Product {
+public class Product implements SuperEntity{
     private int code;
     private String description;
 

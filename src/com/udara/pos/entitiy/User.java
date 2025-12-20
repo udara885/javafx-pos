@@ -1,6 +1,6 @@
 package com.udara.pos.entitiy;
 
-public class User {
+public class User implements SuperEntity{
     private String email;
     private String password;
 
