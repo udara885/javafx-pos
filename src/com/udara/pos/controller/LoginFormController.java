@@ -2,8 +2,10 @@ package com.udara.pos.controller;
 
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
-import com.udara.pos.bo.custom.impl.UserBoImpl;
+import com.udara.pos.bo.BoFactory;
+import com.udara.pos.bo.custom.UserBo;
 import com.udara.pos.dto.UserDto;
+import com.udara.pos.enums.BoType;
 import com.udara.pos.util.PasswordManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -20,9 +22,11 @@ public class LoginFormController {
     public JFXTextField txtEmail;
     public JFXPasswordField txtPassword;
 
+    UserBo bo = BoFactory.getInstance().getBo(BoType.USER);
+
     public void btnSignInOnAction(ActionEvent actionEvent) {
         try {
-            UserDto userDto = new UserBoImpl().findUser(txtEmail.getText());
+            UserDto userDto = bo.findUser(txtEmail.getText());
             if (userDto != null) {
                 if (PasswordManager.checkPassword(txtPassword.getText(), userDto.getPassword())) {
                     setUi("DashboardForm");

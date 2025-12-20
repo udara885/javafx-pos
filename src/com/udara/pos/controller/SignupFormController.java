@@ -2,8 +2,10 @@ package com.udara.pos.controller;
 
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
-import com.udara.pos.bo.custom.impl.UserBoImpl;
+import com.udara.pos.bo.BoFactory;
+import com.udara.pos.bo.custom.UserBo;
 import com.udara.pos.dto.UserDto;
+import com.udara.pos.enums.BoType;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -19,9 +21,11 @@ public class SignupFormController {
     public JFXTextField txtEmail;
     public JFXPasswordField txtPassword;
 
+    UserBo bo = BoFactory.getInstance().getBo(BoType.USER);
+
     public void btnRegisterNowOnAction(ActionEvent actionEvent) {
         try {
-            if (new UserBoImpl().saveUser(new UserDto(txtEmail.getText(), txtPassword.getText()))) {
+            if (bo.saveUser(new UserDto(txtEmail.getText(), txtPassword.getText()))) {
                 new Alert(Alert.AlertType.CONFIRMATION, "User Saved!").show();
                 clearFields();
             } else {

@@ -1,11 +1,12 @@
 package com.udara.pos.bo.custom;
 
+import com.udara.pos.bo.SuperBo;
 import com.udara.pos.dto.ProductDto;
 
 import java.sql.SQLException;
 import java.util.List;
 
-public interface ProductBo {
+public interface ProductBo extends SuperBo {
     public boolean saveProduct(ProductDto dto) throws SQLException, ClassNotFoundException;
 
     public boolean updateProduct(ProductDto dto) throws SQLException, ClassNotFoundException;

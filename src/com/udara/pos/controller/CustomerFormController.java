@@ -2,8 +2,10 @@ package com.udara.pos.controller;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
-import com.udara.pos.bo.custom.impl.CustomerBoImpl;
+import com.udara.pos.bo.BoFactory;
+import com.udara.pos.bo.custom.CustomerBo;
 import com.udara.pos.dto.CustomerDto;
+import com.udara.pos.enums.BoType;
 import com.udara.pos.view.tm.CustomerTm;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -36,6 +38,8 @@ public class CustomerFormController {
     public TableColumn colOperate;
 
     private String searchText = "";
+
+    CustomerBo bo = BoFactory.getInstance().getBo(BoType.CUSTOMER);
 
     public void initialize() throws SQLException, ClassNotFoundException {
         colId.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -73,7 +77,7 @@ public class CustomerFormController {
     private void loadAllCustomers(String searchText) throws SQLException, ClassNotFoundException {
         ObservableList<CustomerTm> observableList = FXCollections.observableArrayList();
         int counter = 1;
-        for (CustomerDto dto : searchText.length() > 0 ? new CustomerBoImpl().searchCustomers(searchText) : new CustomerBoImpl().findAllCustomers()) {
+        for (CustomerDto dto : searchText.length() > 0 ? bo.searchCustomers(searchText) : bo.findAllCustomers()) {
             Button btn = new Button("Delete");
             CustomerTm tm = new CustomerTm(counter, dto.getEmail(), dto.getName(), dto.getContact(), dto.getSalary(), btn);
             btn.setOnAction(e -> {
@@ -81,7 +85,7 @@ public class CustomerFormController {
                 Optional<ButtonType> buttonType = alert.showAndWait();
                 if (buttonType.get().equals(ButtonType.YES)) {
                     try {
-                        if (new CustomerBoImpl().deleteCustomer(dto.getEmail())) {
+                        if (bo.deleteCustomer(dto.getEmail())) {
                             new Alert(Alert.AlertType.INFORMATION, "Customer Deleted!").show();
                             loadAllCustomers(searchText);
                         } else {
@@ -115,7 +119,7 @@ public class CustomerFormController {
     public void btnSaveCustomerOnAction(ActionEvent actionEvent) {
         try {
             if (btnSaveCustomer.getText().equals("Save Customer")) {
-                if (new CustomerBoImpl().saveCustomer(new CustomerDto(txtEmail.getText(), txtName.getText(), txtContact.getText(), Double.parseDouble(txtSalary.getText())))) {
+                if (bo.saveCustomer(new CustomerDto(txtEmail.getText(), txtName.getText(), txtContact.getText(), Double.parseDouble(txtSalary.getText())))) {
                     new Alert(Alert.AlertType.INFORMATION, "Customer Saved!").show();
                     clearFields();
                     loadAllCustomers(searchText);
@@ -123,7 +127,7 @@ public class CustomerFormController {
                     new Alert(Alert.AlertType.WARNING, "Try Again!").show();
                 }
             } else {
-                if (new CustomerBoImpl().updateCustomer(new CustomerDto(txtEmail.getText(), txtName.getText(), txtContact.getText(), Double.parseDouble(txtSalary.getText())))) {
+                if (bo.updateCustomer(new CustomerDto(txtEmail.getText(), txtName.getText(), txtContact.getText(), Double.parseDouble(txtSalary.getText())))) {
                     new Alert(Alert.AlertType.INFORMATION, "Customer Updated!").show();
                     clearFields();
                     loadAllCustomers(searchText);
