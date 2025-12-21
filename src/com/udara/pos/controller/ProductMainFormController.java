@@ -43,6 +43,7 @@ public class ProductMainFormController {
     public TextField txtSelectedProductCode;
     public TextArea txtSelectedProductDescription;
     public JFXButton btnSaveProduct;
+    public JFXButton btnNewBatch;
 
     private String searchText = "";
 
@@ -76,11 +77,12 @@ public class ProductMainFormController {
         txtProductDescription.setText(productTm.getDescription());
         txtSelectedProductCode.setText(String.valueOf(productTm.getCode()));
         txtSelectedProductDescription.setText(productTm.getDescription());
+        btnNewBatch.setDisable(false);
     }
 
     private void loadAllProducts(String searchText) throws SQLException, ClassNotFoundException {
         ObservableList<ProductTm> observableList = FXCollections.observableArrayList();
-        for (ProductDto dto : searchText.length() > 0 ? bo.searchProducts(searchText) : bo.findAllProducts()) {
+        for (ProductDto dto : !searchText.isEmpty() ? bo.searchProducts(searchText) : bo.findAllProducts()) {
             Button showMore = new Button("Show More");
             Button deleteButton = new Button("Delete");
             ProductTm tm = new ProductTm(dto.getId(), dto.getDescription(), showMore, deleteButton);
@@ -154,11 +156,18 @@ public class ProductMainFormController {
     }
 
     public void btnNewBatchOnAction(ActionEvent actionEvent) throws IOException {
-        Stage stage = new Stage();
-        Parent load = FXMLLoader.load(getClass().getResource("../view/NewBatchForm.fxml"));
-        stage.setScene(new Scene(load));
-        stage.show();
-        stage.centerOnScreen();
+        if (!txtSelectedProductCode.getText().isEmpty()) {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../view/NewBatchForm.fxml"));
+            Parent parent = fxmlLoader.load();
+            NewBatchFormController controller = fxmlLoader.getController();
+            controller.setProductCode(Integer.parseInt(txtSelectedProductCode.getText()), txtSelectedProductDescription.getText());
+            Stage stage = new Stage();
+            stage.setScene(new Scene(parent));
+            stage.show();
+            stage.centerOnScreen();
+        } else {
+            new Alert(Alert.AlertType.WARNING, "Please select a valid one!").show();
+        }
     }
 
     private void setUi(String url) throws IOException {

@@ -6,6 +6,7 @@
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
@@ -23,44 +24,53 @@
                 <ImageView fx:id="imgBarcode" fitHeight="190.0" fitWidth="190.0" layoutX="13.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" />
             </children>
         </AnchorPane>
-        <TextField layoutX="262.0" layoutY="59.0" prefHeight="25.0" prefWidth="256.0" promptText="Qty">
+        <TextField fx:id="txtQty" layoutX="262.0" layoutY="59.0" prefHeight="25.0" prefWidth="256.0" promptText="Qty">
             <font>
                 <Font name="System Bold" size="13.0" />
             </font>
         </TextField>
-        <TextField layoutX="262.0" layoutY="98.0" prefHeight="25.0" prefWidth="256.0" promptText="Buying Price">
+        <TextField fx:id="txtBuyingPrice" layoutX="262.0" layoutY="98.0" prefHeight="25.0" prefWidth="256.0" promptText="Buying Price">
             <font>
                 <Font name="System Bold" size="13.0" />
             </font>
         </TextField>
-        <TextField layoutX="262.0" layoutY="137.0" prefHeight="25.0" prefWidth="256.0" promptText="Selling Price">
+        <TextField fx:id="txtSellingPrice" layoutX="262.0" layoutY="137.0" prefHeight="25.0" prefWidth="256.0" promptText="Selling Price">
             <font>
                 <Font name="System Bold" size="13.0" />
             </font>
         </TextField>
-        <TextField layoutX="262.0" layoutY="176.0" prefHeight="25.0" prefWidth="256.0" promptText="Show Price">
+        <TextField fx:id="txtShowPrice" layoutX="262.0" layoutY="176.0" prefHeight="25.0" prefWidth="256.0" promptText="Show Price">
             <font>
                 <Font name="System Bold" size="13.0" />
             </font>
         </TextField>
-        <TextField layoutX="22.0" layoutY="274.0" prefHeight="29.0" prefWidth="216.0" promptText="Product Code">
+        <TextField fx:id="txtProductCode" editable="false" layoutX="22.0" layoutY="274.0" prefHeight="29.0" prefWidth="216.0" promptText="Product Code">
             <font>
                 <Font name="System Bold" size="13.0" />
             </font>
         </TextField>
-        <TextField alignment="TOP_LEFT" layoutX="22.0" layoutY="318.0" prefHeight="102.0" prefWidth="495.0" promptText="Description">
+        <TextField fx:id="txtProductDescription" alignment="TOP_LEFT" editable="false" layoutX="22.0" layoutY="318.0" prefHeight="102.0" prefWidth="495.0" promptText="Description">
             <font>
                 <Font name="System Bold" size="13.0" />
             </font>
         </TextField>
-        <RadioButton layoutX="262.0" layoutY="242.0" mnemonicParsing="false" text="YES" />
+        <RadioButton fx:id="rBtnYes" layoutX="262.0" layoutY="242.0" mnemonicParsing="false" text="YES">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+         <toggleGroup>
+            <ToggleGroup fx:id="discount" />
+         </toggleGroup></RadioButton>
         <Label layoutX="262.0" layoutY="215.0" text="Discount %" textFill="#0f00b2">
             <font>
                 <Font name="System Bold" size="13.0" />
             </font>
         </Label>
-        <RadioButton layoutX="331.0" layoutY="242.0" mnemonicParsing="false" selected="true" text="No" />
-        <JFXButton buttonType="RAISED" layoutX="420.0" layoutY="274.0" prefHeight="29.0" prefWidth="97.0" style="-fx-background-color: #27ae60;" text="Save Batch" textFill="WHITE">
+        <RadioButton layoutX="331.0" layoutY="242.0" mnemonicParsing="false" selected="true" text="No" toggleGroup="$discount">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor></RadioButton>
+        <JFXButton buttonType="RAISED" layoutX="420.0" layoutY="274.0" onAction="#btnSaveBatchOnAction" prefHeight="29.0" prefWidth="97.0" style="-fx-background-color: #27ae60;" text="Save Batch" textFill="WHITE">
             <cursor>
                 <Cursor fx:constant="HAND" />
             </cursor>

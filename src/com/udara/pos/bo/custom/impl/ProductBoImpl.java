@@ -53,7 +53,7 @@ public class ProductBoImpl implements ProductBo {
 
     public List<ProductDto> searchProducts(String searchText) throws SQLException, ClassNotFoundException {
         List<ProductDto> productDtos = new ArrayList<>();
-        for (Product p : productDao.findAll()) {
+        for (Product p : productDao.searchProducts(searchText)) {
             productDtos.add(new ProductDto(p.getCode(), p.getDescription()));
         }
         return productDtos;
