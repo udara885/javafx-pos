@@ -4,7 +4,9 @@ import com.udara.pos.dao.CrudUtil;
 import com.udara.pos.dao.custom.ProductDetailDao;
 import com.udara.pos.entitiy.ProductDetail;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -20,17 +22,27 @@ public class ProductDetailDaoImpl implements ProductDetailDao {
     }
 
     @Override
-    public boolean delete(String s) throws SQLException, ClassNotFoundException {
-        return false;
+    public boolean delete(String string) throws SQLException, ClassNotFoundException {
+        return CrudUtil.execute("DELETE FROM product_detail WHERE code=?", string);
     }
 
     @Override
-    public ProductDetail find(String s) throws SQLException, ClassNotFoundException {
+    public ProductDetail find(String string) throws SQLException, ClassNotFoundException {
         return null;
     }
 
     @Override
     public List<ProductDetail> findAll() throws SQLException, ClassNotFoundException {
         return Collections.emptyList();
+    }
+
+    @Override
+    public List<ProductDetail> findAllProductDetails(int code) throws SQLException, ClassNotFoundException {
+        ResultSet set = CrudUtil.execute("SELECT * FROM product_detail WHERE product_code=?", code);
+        List<ProductDetail> list = new ArrayList<>();
+        while (set.next()) {
+            list.add(new ProductDetail(set.getString(1), set.getString(2), set.getInt(3), set.getDouble(4), set.getDouble(5), set.getDouble(7), set.getInt(8), set.getBoolean(6)));
+        }
+        return list;
     }
 }

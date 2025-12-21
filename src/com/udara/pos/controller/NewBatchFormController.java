@@ -66,7 +66,10 @@ public class NewBatchFormController {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         javax.imageio.ImageIO.write(bufferedImage, "png", baos);
         byte[] arr = baos.toByteArray();
-        ProductDetailDto dto = new ProductDetailDto(uniqueData, Base64.encodeBase64String(arr), Integer.parseInt(txtQty.getText()), Double.parseDouble(txtBuyingPrice.getText()), Double.parseDouble(txtSellingPrice.getText()), Double.parseDouble(txtShowPrice.getText()), Integer.parseInt(txtProductCode.getText()), rBtnYes.isSelected());
+        ProductDetailDto dto = new ProductDetailDto(uniqueData, Base64.encodeBase64String(arr),
+                Integer.parseInt(txtQty.getText()), Double.parseDouble(txtSellingPrice.getText()),
+                Double.parseDouble(txtBuyingPrice.getText()), Double.parseDouble(txtShowPrice.getText()),
+                Integer.parseInt(txtProductCode.getText()), rBtnYes.isSelected());
         try {
             if (productDetailBo.saveProductDetail(dto)) {
                 new Alert(Alert.AlertType.INFORMATION, "Batch Saved!").show();

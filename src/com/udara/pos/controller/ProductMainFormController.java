@@ -4,8 +4,11 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import com.udara.pos.bo.BoFactory;
 import com.udara.pos.bo.custom.ProductBo;
+import com.udara.pos.bo.custom.ProductDetailBo;
+import com.udara.pos.dto.ProductDetailDto;
 import com.udara.pos.dto.ProductDto;
 import com.udara.pos.enums.BoType;
+import com.udara.pos.view.tm.ProductDetailTm;
 import com.udara.pos.view.tm.ProductTm;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -32,7 +35,7 @@ public class ProductMainFormController {
     public TableColumn colDescription;
     public TableColumn colShowMore;
     public TableColumn colProductDelete;
-    public TableView tblBatch;
+    public TableView<ProductDetailTm> tblBatch;
     public TableColumn colBatchId;
     public TableColumn colQty;
     public TableColumn colSellingPrice;
@@ -49,18 +52,32 @@ public class ProductMainFormController {
 
     ProductBo bo = BoFactory.getInstance().getBo(BoType.PRODUCT);
 
+    ProductDetailBo detailBo = BoFactory.getInstance().getBo(BoType.PRODUCT_DETAIL);
+
     public void initialize() throws SQLException, ClassNotFoundException {
         colProductId.setCellValueFactory(new PropertyValueFactory<>("code"));
         colDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
         colShowMore.setCellValueFactory(new PropertyValueFactory<>("showMore"));
         colProductDelete.setCellValueFactory(new PropertyValueFactory<>("deleteButton"));
-        loadAllProducts(searchText);
+
+        colBatchId.setCellValueFactory(new PropertyValueFactory<>("code"));
+        colQty.setCellValueFactory(new PropertyValueFactory<>("qtyOnHand"));
+        colSellingPrice.setCellValueFactory(new PropertyValueFactory<>("sellingPrice"));
+        colBuyingPrice.setCellValueFactory(new PropertyValueFactory<>("buyingPrice"));
+        colDiscountAvailability.setCellValueFactory(new PropertyValueFactory<>("discountAvailability"));
+        colShowPrice.setCellValueFactory(new PropertyValueFactory<>("showPrice"));
+        colBatchDelete.setCellValueFactory(new PropertyValueFactory<>("deleteBtn"));
+
+        // load new product code
         setProductCode();
+        loadAllProducts(searchText);
+
         tblProduct.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 setData(newValue);
             }
         }));
+
         txtSearch.textProperty().addListener(((observable, oldValue, newValue) -> {
             searchText = newValue;
             try {
@@ -78,6 +95,11 @@ public class ProductMainFormController {
         txtSelectedProductCode.setText(String.valueOf(productTm.getCode()));
         txtSelectedProductDescription.setText(productTm.getDescription());
         btnNewBatch.setDisable(false);
+        try {
+            loadBatchData(productTm.getCode());
+        } catch (ClassNotFoundException | SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void loadAllProducts(String searchText) throws SQLException, ClassNotFoundException {
@@ -107,6 +129,33 @@ public class ProductMainFormController {
             observableList.add(tm);
         }
         tblProduct.setItems(observableList);
+    }
+
+    private void loadBatchData(int code) throws SQLException, ClassNotFoundException {
+        ObservableList<ProductDetailTm> observableList = FXCollections.observableArrayList();
+        for (ProductDetailDto dto : detailBo.findAllProductDetails(code)) {
+            Button deleteBtn = new Button("Delete");
+            ProductDetailTm tm = new ProductDetailTm(dto.getCode(), dto.getQtyOnHand(), dto.getSellingPrice(), dto.getBuyingPrice(), dto.isDiscountAvailability(), dto.getShowPrice(), deleteBtn);
+            deleteBtn.setOnAction(e -> {
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure?", ButtonType.YES, ButtonType.NO);
+                Optional<ButtonType> buttonType = alert.showAndWait();
+                if (buttonType.get().equals(ButtonType.YES)) {
+                    try {
+                        if (detailBo.deleteProductDetail(dto.getCode())) {
+                            new Alert(Alert.AlertType.INFORMATION, "Batch Deleted!").show();
+                            loadBatchData(dto.getProductCode());
+                        } else {
+                            new Alert(Alert.AlertType.WARNING, "Try Again!").show();
+                        }
+                    } catch (ClassNotFoundException | SQLException ex) {
+                        ex.printStackTrace();
+                        new Alert(Alert.AlertType.ERROR, ex.getMessage()).show();
+                    }
+                }
+            });
+            observableList.add(tm);
+        }
+        tblBatch.setItems(observableList);
     }
 
     private void setProductCode() {
