@@ -157,11 +157,11 @@ public class ProductMainFormController {
 
     public void btnNewBatchOnAction(ActionEvent actionEvent) throws IOException {
         if (!txtSelectedProductCode.getText().isEmpty()) {
+            Stage stage = new Stage();
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../view/NewBatchForm.fxml"));
             Parent parent = fxmlLoader.load();
             NewBatchFormController controller = fxmlLoader.getController();
-            controller.setProductCode(Integer.parseInt(txtSelectedProductCode.getText()), txtSelectedProductDescription.getText());
-            Stage stage = new Stage();
+            controller.setDetails(Integer.parseInt(txtSelectedProductCode.getText()), txtSelectedProductDescription.getText(), stage);
             stage.setScene(new Scene(parent));
             stage.show();
             stage.centerOnScreen();

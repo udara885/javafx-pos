@@ -1,5 +1,5 @@
 package com.udara.pos.enums;
 
 public enum BoType {
-    USER, CUSTOMER, PRODUCT
+    USER, CUSTOMER, PRODUCT, PRODUCT_DETAIL
 }

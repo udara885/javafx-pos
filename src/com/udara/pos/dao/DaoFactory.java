@@ -1,5 +1,6 @@
 package com.udara.pos.dao;
 
+import com.udara.pos.dao.custom.impl.ProductDetailDaoImpl;
 import com.udara.pos.dao.custom.impl.CustomerDaoImpl;
 import com.udara.pos.dao.custom.impl.ProductDaoImpl;
 import com.udara.pos.dao.custom.impl.UserDaoImpl;
@@ -23,6 +24,8 @@ public class DaoFactory {
                 return (T) new ProductDaoImpl();
             case CUSTOMER:
                 return (T) new CustomerDaoImpl();
+            case PRODUCT_DETAIL:
+                return (T) new ProductDetailDaoImpl();
             default:
                 return null;
         }
