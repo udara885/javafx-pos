@@ -1,5 +1,6 @@
 package com.udara.pos.controller;
 
+import com.google.zxing.WriterException;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import com.udara.pos.bo.BoFactory;
@@ -84,6 +85,16 @@ public class ProductMainFormController {
                 loadAllProducts(searchText);
             } catch (ClassNotFoundException | SQLException e) {
                 throw new RuntimeException(e);
+            }
+        }));
+
+        tblBatch.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                try {
+                    loadExternalUi(true, newValue);
+                } catch (IOException | SQLException | ClassNotFoundException | WriterException e) {
+                    throw new RuntimeException(e);
+                }
             }
         }));
     }
@@ -204,13 +215,18 @@ public class ProductMainFormController {
         }
     }
 
-    public void btnNewBatchOnAction(ActionEvent actionEvent) throws IOException {
+    public void btnNewBatchOnAction(ActionEvent actionEvent) throws IOException, SQLException, ClassNotFoundException, WriterException {
+        loadExternalUi(false, null);
+    }
+
+    private void loadExternalUi(boolean state, ProductDetailTm tm) throws IOException, SQLException, ClassNotFoundException, WriterException {
         if (!txtSelectedProductCode.getText().isEmpty()) {
             Stage stage = new Stage();
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../view/NewBatchForm.fxml"));
             Parent parent = fxmlLoader.load();
             NewBatchFormController controller = fxmlLoader.getController();
-            controller.setDetails(Integer.parseInt(txtSelectedProductCode.getText()), txtSelectedProductDescription.getText(), stage);
+            controller.setDetails(Integer.parseInt(txtSelectedProductCode.getText()),
+                    txtSelectedProductDescription.getText(), stage, state, tm);
             stage.setScene(new Scene(parent));
             stage.show();
             stage.centerOnScreen();

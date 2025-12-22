@@ -23,10 +23,18 @@ public class ProductDetailBoImpl implements ProductDetailBo {
     public List<ProductDetailDto> findAllProductDetails(int code) throws SQLException, ClassNotFoundException {
         List<ProductDetailDto> dtos = new ArrayList<>();
         for (ProductDetail p : dao.findAllProductDetails(code)) {
-            dtos.add(new ProductDetailDto(p.getCode(), p.getBarcode(), p.getQtyOnHand(), p.getSellingPrice(),
-                    p.getBuyingPrice(), p.getShowPrice(), p.getProductCode(), p.isDiscountAvailability()));
+            dtos.add(new ProductDetailDto(p.getCode(), p.getBarcode(), p.getQtyOnHand(), p.getSellingPrice(), p.getBuyingPrice(), p.getShowPrice(), p.getProductCode(), p.isDiscountAvailability()));
         }
         return dtos;
+    }
+
+    @Override
+    public ProductDetailDto findProductDetail(String code) throws SQLException, ClassNotFoundException {
+        ProductDetail productDetail = dao.findProductDetail(code);
+        if (productDetail != null) {
+            return new ProductDetailDto(productDetail.getCode(), productDetail.getBarcode(), productDetail.getQtyOnHand(), productDetail.getSellingPrice(), productDetail.getBuyingPrice(), productDetail.getShowPrice(), productDetail.getProductCode(), productDetail.isDiscountAvailability());
+        }
+        return null;
     }
 
     @Override

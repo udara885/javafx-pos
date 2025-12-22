@@ -11,5 +11,7 @@ public interface ProductDetailBo extends SuperBo {
 
     public List<ProductDetailDto> findAllProductDetails(int code) throws SQLException, ClassNotFoundException;
 
+    public ProductDetailDto findProductDetail(String code) throws SQLException, ClassNotFoundException;
+
     public boolean deleteProductDetail(String code) throws SQLException, ClassNotFoundException;
 }
