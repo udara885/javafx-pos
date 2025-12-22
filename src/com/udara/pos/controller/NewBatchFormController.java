@@ -23,6 +23,7 @@ import javafx.stage.Stage;
 import org.apache.commons.codec.binary.Base64;
 
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -64,6 +65,8 @@ public class NewBatchFormController {
                     txtSellingPrice.setText(String.valueOf(productDetail.getSellingPrice()));
                     txtShowPrice.setText(String.valueOf(productDetail.getShowPrice()));
                     rBtnYes.setSelected(productDetail.isDiscountAvailability());
+                    byte[] data = Base64.decodeBase64(productDetail.getBarcode());
+                    imgBarcode.setImage(new Image(new ByteArrayInputStream(data)));
                 } else {
                     stage.close();
                 }
@@ -89,11 +92,7 @@ public class NewBatchFormController {
         try {
             if (productDetailBo.saveProductDetail(dto)) {
                 new Alert(Alert.AlertType.INFORMATION, "Batch Saved!").show();
-                /*Thread.sleep(3000);
-                this.stage.close();*/
-                Platform.runLater(() -> {
-                    this.stage.close();
-                });
+                Platform.runLater(() -> this.stage.close());
             } else {
                 new Alert(Alert.AlertType.WARNING, "Try Again!").show();
             }
