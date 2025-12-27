@@ -1,9 +1,6 @@
 package com.udara.pos.bo;
 
-import com.udara.pos.bo.custom.impl.CustomerBoImpl;
-import com.udara.pos.bo.custom.impl.ProductBoImpl;
-import com.udara.pos.bo.custom.impl.ProductDetailBoImpl;
-import com.udara.pos.bo.custom.impl.UserBoImpl;
+import com.udara.pos.bo.custom.impl.*;
 import com.udara.pos.enums.BoType;
 
 public class BoFactory {
@@ -26,6 +23,12 @@ public class BoFactory {
                 return (T) new CustomerBoImpl();
             case PRODUCT_DETAIL:
                 return (T) new ProductDetailBoImpl();
+            case ITEM_DETAIL:
+                return (T) new ItemDetailBoImpl();
+            case ORDER_DETAIL:
+                return (T) new OrderDetailBoImpl();
+            case LOYALTY_CARD:
+                return (T) new LoyaltyCardBoImpl();
             default:
                 return null;
         }

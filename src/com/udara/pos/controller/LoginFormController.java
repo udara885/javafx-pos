@@ -7,6 +7,7 @@ import com.udara.pos.bo.custom.UserBo;
 import com.udara.pos.dto.UserDto;
 import com.udara.pos.enums.BoType;
 import com.udara.pos.util.PasswordManager;
+import com.udara.pos.util.UserSessionData;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -29,6 +30,7 @@ public class LoginFormController {
             UserDto userDto = bo.findUser(txtEmail.getText());
             if (userDto != null) {
                 if (PasswordManager.checkPassword(txtPassword.getText(), userDto.getPassword())) {
+                    UserSessionData.email = txtEmail.getText();
                     setUi("DashboardForm");
                 } else {
                     new Alert(Alert.AlertType.WARNING, "Check your password and try again!").show();

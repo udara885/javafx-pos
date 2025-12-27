@@ -1,9 +1,6 @@
 package com.udara.pos.dao;
 
-import com.udara.pos.dao.custom.impl.ProductDetailDaoImpl;
-import com.udara.pos.dao.custom.impl.CustomerDaoImpl;
-import com.udara.pos.dao.custom.impl.ProductDaoImpl;
-import com.udara.pos.dao.custom.impl.UserDaoImpl;
+import com.udara.pos.dao.custom.impl.*;
 import com.udara.pos.enums.DaoType;
 
 public class DaoFactory {
@@ -16,8 +13,8 @@ public class DaoFactory {
         return daoFactory == null ? daoFactory = new DaoFactory() : daoFactory;
     }
 
-    public <T> T getDao(DaoType daoType){
-        switch (daoType){
+    public <T> T getDao(DaoType daoType) {
+        switch (daoType) {
             case USER:
                 return (T) new UserDaoImpl();
             case PRODUCT:
@@ -26,6 +23,11 @@ public class DaoFactory {
                 return (T) new CustomerDaoImpl();
             case PRODUCT_DETAIL:
                 return (T) new ProductDetailDaoImpl();
+            case ITEM_DETAIL:
+                return (T) new ItemDetailDaoImpl();
+            case ORDER_DETAIL:
+                return (T) new OrderDetailDaoImpl(); case LOYALTY_CARD:
+                return (T) new LoyaltyCardDaoImpl();
             default:
                 return null;
         }

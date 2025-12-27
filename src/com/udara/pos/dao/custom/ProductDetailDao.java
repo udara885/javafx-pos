@@ -1,6 +1,7 @@
 package com.udara.pos.dao.custom;
 
 import com.udara.pos.dao.CrudDao;
+import com.udara.pos.dto.ProductDetailJoinDto;
 import com.udara.pos.entitiy.ProductDetail;
 
 import java.sql.SQLException;
@@ -10,4 +11,8 @@ public interface ProductDetailDao extends CrudDao<ProductDetail, String> {
     public List<ProductDetail> findAllProductDetails(int code) throws SQLException, ClassNotFoundException;
 
     public ProductDetail findProductDetail(String code) throws SQLException, ClassNotFoundException;
+
+    public ProductDetailJoinDto findProductDetailJoinData(String code) throws SQLException, ClassNotFoundException;
+
+    public boolean manageQty(String barcode, int qty) throws SQLException, ClassNotFoundException;
 }

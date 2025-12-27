@@ -4,6 +4,7 @@ import com.udara.pos.bo.custom.ProductDetailBo;
 import com.udara.pos.dao.DaoFactory;
 import com.udara.pos.dao.custom.ProductDetailDao;
 import com.udara.pos.dto.ProductDetailDto;
+import com.udara.pos.dto.ProductDetailJoinDto;
 import com.udara.pos.entitiy.ProductDetail;
 import com.udara.pos.enums.DaoType;
 
@@ -35,6 +36,11 @@ public class ProductDetailBoImpl implements ProductDetailBo {
             return new ProductDetailDto(productDetail.getCode(), productDetail.getBarcode(), productDetail.getQtyOnHand(), productDetail.getSellingPrice(), productDetail.getBuyingPrice(), productDetail.getShowPrice(), productDetail.getProductCode(), productDetail.isDiscountAvailability());
         }
         return null;
+    }
+
+    @Override
+    public ProductDetailJoinDto findProductJoinDetail(String code) throws SQLException, ClassNotFoundException {
+        return dao.findProductDetailJoinData(code);
     }
 
     @Override
